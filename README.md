@@ -1,1 +1,2 @@
-# Haskel.Stepic.P1
+﻿#  Конспекты лекций и решения заданий.
+## Haskel.Stepic.P1
