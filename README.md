@@ -2,7 +2,7 @@
 #  Конспекты лекций и решения заданий.
 ## Haskel.Stepic.P1
 >1.3.Операторы
-[id]: https://github.com/AndrewClimber/Haskel.Stepic.P1/tree/master/1.3.%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%8B "1.3.Операторы"
+(https://github.com/AndrewClimber/Haskel.Stepic.P1/tree/master/1.3.%D0%9E%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D0%BE%D1%80%D1%8B "1.3.Операторы")
 >1.4.Базовые типы
 >1.5.Рекурсии
 >1.6 Локальные связывания
