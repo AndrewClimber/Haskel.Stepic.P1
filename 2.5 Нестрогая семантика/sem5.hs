@@ -46,7 +46,7 @@ Prelude> seq (id undefined)  2
 Насколько глубоко seq форсирует вычисление своего 1-го аргумента ?
 seq форсирует его не до NF, а до WHNF
 
-Нерасходится в случае конструктора пары - WHNF . sqe строит пару - а аргументами пары не интересуется.
+Нерасходится в случае конструктора пары - WHNF . seq строит пару - а аргументами пары не интересуется.
 Prelude> seq (undefined, undefined) 2
 2
 
@@ -56,3 +56,36 @@ Prelude> seq (\x -> undefined) 2
 
 Итак - seq форсирует вычисления. но это не полное форсирование. А только до WHNF.
 -}
+
+{-
+выражение   x' `seq` y' `seq` n' `seq` quux n' p        равносильно
+выражению  x' `seq` (y' `seq` (n' `seq` quux n' p))   - так? 
+
+-}
+foo 0 x = x
+foo n x = let x' = foo (n - 1) (x + 1)
+          in x' `seq` x'
+
+bar 0 f = f
+bar x f = let f' = \a -> f (x + a)
+              x' = x - 1
+          in f' `seq` x' `seq` bar x' f'
+          
+baz 0 (x, y) = x + y
+baz n (x, y) = let x' = x + 1
+                   y' = y - 1
+                   p  = (x', y')
+                   n' = n - 1
+               in p `seq` n' `seq` baz n' p
+
+quux 0 (x, y) = x + y
+quux n (x, y) = let x' = x + 1
+                    y' = y - 1
+                    p  = (x', y')
+                    n' = n - 1
+                in x' `seq` y' `seq` n' `seq` quux n' p
+
+-- not foo 
+-- bar ??
+-- not baz
+-- not quux
