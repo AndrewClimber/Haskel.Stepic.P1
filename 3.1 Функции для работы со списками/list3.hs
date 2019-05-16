@@ -34,4 +34,5 @@ length' (_:xs) = 1 + length' xs  -- в правой части нат x. поэ�
 null : [a] -> Bool
 null [] = True
 null _ = False
+
                               
