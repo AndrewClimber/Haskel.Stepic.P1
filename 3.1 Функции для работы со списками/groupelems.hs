@@ -12,15 +12,30 @@ GHCi> groupElems [1,2,3,2,4]
 Разрешается использовать только функции, доступные из библиотеки Prelude.
 -}
 
+-- мое решение
+groupElems :: Eq a => [a] -> [[a]]
+groupElems [] = []
+groupElems xs = fs : groupElems (drop (length fs)  xs) where
+    fs = fst $ span (== head xs) xs
 
---groupElems (x:xs) = if x == head xs then [x: (head xs)] else groupElems xs 
-
---groupElems (x:xs) = (head  xs) 
---groupElems (x:xs) = x
+-- stepik    
+groupElems :: Eq a => [a] -> [[a]]
+groupElems [] = []
+groupElems (x:xs ) = (x:ys) : groupElems zs 
+                     where (ys,zs) = span (==x) xs
 
 groupElems :: Eq a => [a] -> [[a]]
 groupElems [] = []
-groupElems [x] = [[x]]
---groupElems (_:xs) = (fst $ span (== head xs) xs) : groupElems xs
-groupElems (x:xs) = (fst $ span (== x) xs) : groupElems (x:xs)
+groupElems (x:xs) = el : groupElems tail where
+    (el, tail) = span (== x) (x : xs)
 
+groupElems :: Eq a => [a] -> [[a]]
+groupElems [] = []
+groupElems (x:xs) = (fst (span (== x) (x:xs))) : (groupElems (snd (span (== x) (xs))))
+groupElems [] = []
+groupElems [a] = [[a]]
+
+groupElems (a:b:xs) | (a == b) = (a:head result) : tail result
+                    | otherwise = [a] : (result)
+            where 
+                result = groupElems (b:xs)
