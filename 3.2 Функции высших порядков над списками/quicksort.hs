@@ -17,4 +17,27 @@ GHCi> qsort [1,3,2,5]
     spn = (span (<= head xs ) xs)
 -}
 -- oddsOnly'''' = \xs -> [x | x <- xs, odd x]
-qsort(x:xs) = qsort [y | y <- xs, y < x] 
+--qsort(x:xs) = qsort [y | y <- xs, y < x] 
+qsort [] = []
+qsort xs | first > second = second:first:qsort xs
+         | otherwise = qsort xs where
+            first  = head xs
+            second = head $ tail xs
+qs [] = []
+qs (f:s:xs) | f > s = s:qs (f:xs)
+            | otherwise = qs (f:xs)
+
+--qso [] = []
+qso (x:xs) = qso (ys (x:xs)) ++ qso (zs xs) where
+    ys [] = []
+    ys l = filter (<x) l
+    zs [] = []
+    zs l = filter (>=x) l
+
+qqq [] = []
+qqq xs = qqq (fst $ cutUp) ++ qqq (snd $ cutUp) where
+    cutUp = (isPart (>= item) xs, isPart (< item) xs)
+    item  = head xs
+    isPart _ [] = []
+    isPart p a = filter p a
+
