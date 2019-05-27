@@ -8,36 +8,45 @@ GHCi> qsort [1,3,2,5]
 Разрешается использовать только функции, доступные из библиотеки Prelude.
 
 -}
---qsort :: Ord a => [a] -> [a]
---qsort [] = []
-{-qsort (xs)  = glue: qsort xs where 
-    cutr =  fst spn
-    cutl =  snd spn
-    glue = cutl ++ cutr
-    spn = (span (<= head xs ) xs)
--}
--- oddsOnly'''' = \xs -> [x | x <- xs, odd x]
---qsort(x:xs) = qsort [y | y <- xs, y < x] 
+
+
+-- три моих варианта
+qsort :: Ord a => [a] -> [a]
 qsort [] = []
-qsort xs | first > second = second:first:qsort xs
-         | otherwise = qsort xs where
-            first  = head xs
-            second = head $ tail xs
-qs [] = []
-qs (f:s:xs) | f > s = s:qs (f:xs)
-            | otherwise = qs (f:xs)
+qsort xs = qsort (filter (< head xs)  $ drop 1 xs) ++ (head xs):qsort (filter (>= head xs)  $ drop 1 xs)
+------------------------------------
+qsort xs = qsort (leftPart xs) ++ (head xs):qsort (rightPart xs) where
+    leftPart  a = filter  (< head a)  $ drop  1 a
+    rightPart a = filter (>= head a)  $ drop  1 a
+------------------------------------
+qsort [] = []
+qsort (x:xs) = qsort (filter (< x) xs) ++ x:qsort (filter (>= x) xs)
 
---qso [] = []
-qso (x:xs) = qso (ys (x:xs)) ++ qso (zs xs) where
-    ys [] = []
-    ys l = filter (<x) l
-    zs [] = []
-    zs l = filter (>=x) l
 
-qqq [] = []
-qqq xs = qqq (fst $ cutUp) ++ qqq (snd $ cutUp) where
-    cutUp = (isPart (>= item) xs, isPart (< item) xs)
-    item  = head xs
-    isPart _ [] = []
-    isPart p a = filter p a
+-- stepik
+
+qsort [] = []
+qsort (x:[]) = [x]
+qsort (x:xs) = qsort (filter (\i -> i <= x) xs) ++ [x] ++ qsort (filter (\i -> i > x) xs)
+------------------------------------
+
+qsort [] = []
+qsort ys@(x:xs) | null xs = ys
+                | otherwise = qsort (filter p xs) ++ x:qsort (filter (not.p) xs) where p = (< x)
+
+------------------------------------
+qsort [] = []
+qsort (x:xs) = qsort[y | y <- xs, y < x] ++ [x] ++ qsort[y | y <- xs, y >= x]                
+
+------------------------------------
+qsort xs | length xs <= 1 = xs
+qsort (x : xs) = qsort (filter (< x) xs) ++ x : qsort (filter (>= x) xs)
+
+------------------------------------
+qsort []  = []
+qsort (x:xs) = qsort left ++ x : qsort right
+  where
+    left  = filter (< x)  xs
+    right = filter (>= x) xs
+------------------------------------
 
