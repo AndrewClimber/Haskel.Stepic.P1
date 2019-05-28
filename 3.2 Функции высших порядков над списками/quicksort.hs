@@ -19,6 +19,7 @@ qsort xs = qsort (leftPart xs) ++ (head xs):qsort (rightPart xs) where
     leftPart  a = filter  (< head a)  $ drop  1 a
     rightPart a = filter (>= head a)  $ drop  1 a
 ------------------------------------
+qsort :: Ord a => [a] -> [a]
 qsort [] = []
 qsort (x:xs) = qsort (filter (< x) xs) ++ x:qsort (filter (>= x) xs)
 

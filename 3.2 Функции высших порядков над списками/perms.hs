@@ -19,9 +19,54 @@ concatMap f = concat . map f
 
 -}
 
-perms :: [a] -> [[a]]
-perms [] = [[]]
-perms xs = [[f, s], [s, f]] where
+--perms :: [a] -> [[a]]
+--perms [] = [[]]
+{-perms xs = [[f, s], [s, f]] where
     f = head xs
     s = head (tail xs)
+-}
 
+perms :: [a] -> [[a]]
+perms [] = [[]]
+--perms xs = concatMap (\x -> [(x:xs)]) xs
+perms (xs) = concatMap (\x -> [(end xs)]) xs 
+
+
+
+
+top a [] = [a]
+top a (x:xs) = a : top x xs
+app a [] = [a]
+app a (x:xs) = x : app a xs 
+
+end (x:xs) = app x xs
+pal (x:xs) = (app x xs)++(top x xs)
+
+
+pe (xs) = concatMap (\x-> [(end xs)]) xs where 
+    app a [] = [a]
+    app a (x:xs) = x : app a xs 
+    end (x:xs) = app x xs
+
+{-
+map :: (a -> b) -> [a] -> [b]
+map _ [] = []
+map f (x:xs) = f x : map f xs
+-}    
+
+
+
+--cMap = (.) (.) (.) concat map
+--(.:) = (.) (.) (.)
+--cMap = (.:) concat map
+-- cMap = (concat .) . map
+cp = (.)
+cMap = cp cp cp concat map
+
+
+fu (x:xs) = [x]
+
+
+--oddEven :: [Integer] -> [Integer]
+oddEven (h1:h2:t) = h2:h1:oddEven t
+oddEven t = t
