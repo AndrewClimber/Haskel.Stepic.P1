@@ -6,67 +6,44 @@ GHCi> perms [1,2,3]
 [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
 Считайте, что все элементы в списке уникальны, и что для пустого списка имеется одна перестановка.
 -}
+-- http://qaru.site/questions/922395/get-all-permutations-of-a-list-in-haskell
+perms :: [a] -> [[a]]
+perms []     = [[]]
+perms (x:xs) = concatMap (rotations . (x:)) $ perms xs where
+    rotations xs = take (length xs) (iterate (\(y:ys) -> ys ++ [y]) xs)
 
+
+-- stepik 
 
 {-
-concatMap :: (a -> [b]) -> [a] -> [b]
-concatMap f = concat . map f
-
-{-
-*Main> concatMap (\x -> [x,x,x]) [1,2,3]
-[1,1,1,2,2,2,3,3,3]
+Поскольку, это именно то решение, которое мы ожидали, давайте я поясню здесь для будущих читателей, как оно работает.
+Идея состоит в том, чтобы сгенерировать все перестановки рекурсивно. Для этого мы вызываем `perms xs` и, по предположению, получаем 
+все перестановки для хвоста нашего списка. Например, если список был `[1, 2, 3]`, мы получили все перестановки списка `[2, 3]`, то есть `[[2, 3], [3, 2]]`. 
+Теперь надо преобразовать этот ответ для хвоста в ответ для нашего исходного списка. Для этого требуется недостающий элемент `1` вставить всеми 
+возможными способами в полученные перестановки.
+Чтобы сделать это, мы реализуем функцию `insertElem x xs`, которая вставляет `x` во все позиции списка `xs`, то есть, первым элементом, между первым и вторым, 
+между вторым и третьим, и так далее. Эта функция тоже работает рекурсивно.
+Таким образом, `insertElem 1 [2,3] = [[1,2,3], [2,1,3], [2,3,1]]`, а `insertElem 1 [3,2] = [[1,3,2], [3,1,2], [3,2,1]]`. 
+Соответственно, остается только применить функцию `insertElem x` к полученным рекурсивно перестановкам хвоста и сплющить полученный список, 
+для чего и подходит функция `concatMap`.
 -}
-
--}
-
---perms :: [a] -> [[a]]
---perms [] = [[]]
-{-perms xs = [[f, s], [s, f]] where
-    f = head xs
-    s = head (tail xs)
--}
-
 perms :: [a] -> [[a]]
 perms [] = [[]]
---perms xs = concatMap (\x -> [(x:xs)]) xs
-perms (xs) = concatMap (\x -> [(end xs)]) xs 
+perms [x] = [[x]]
+perms (x:xs) = concatMap (insertElem x) (perms xs) where
+			insertElem x [] = [[x]]
+			insertElem x yss@(y:ys) = (x:yss) : map (y:) (insertElem x ys)
 
-
-
-
-top a [] = [a]
-top a (x:xs) = a : top x xs
-app a [] = [a]
-app a (x:xs) = x : app a xs 
-
-end (x:xs) = app x xs
-pal (x:xs) = (app x xs)++(top x xs)
-
-
-pe (xs) = concatMap (\x-> [(end xs)]) xs where 
-    app a [] = [a]
-    app a (x:xs) = x : app a xs 
-    end (x:xs) = app x xs
 
 {-
-map :: (a -> b) -> [a] -> [b]
-map _ [] = []
-map f (x:xs) = f x : map f xs
+Функция helper "проталкивает" элемент y на каждую позицию списка и возвращает список списков, где у стоит на 1ой, 2ой, ... n-ой позиции. 
 -}    
+helper y [] = [[y]]
+helper y (x : lst) = (y : x : lst) :  (map (\u -> x : u) (helper y lst))
+    
+perms [] = [[]]
+perms (x : xs) = concatMap (\u -> helper x u) (perms xs) 
+        
 
+    
 
-
---cMap = (.) (.) (.) concat map
---(.:) = (.) (.) (.)
---cMap = (.:) concat map
--- cMap = (concat .) . map
-cp = (.)
-cMap = cp cp cp concat map
-
-
-fu (x:xs) = [x]
-
-
---oddEven :: [Integer] -> [Integer]
-oddEven (h1:h2:t) = h2:h1:oddEven t
-oddEven t = t
