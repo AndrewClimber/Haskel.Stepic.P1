@@ -11,8 +11,8 @@ fibStream = fib 0 1 where
               | otherwise =  (zipWith (+) [n1] [n2]) ++ fib (n1+1) (n2+1)
 -}
 
---fibStream :: [Integer]
-fibStream n = 0:1:zipWith (+) [(fibStream !! n)] [(fibStream !! (n+1))]
+fibStream :: [Integer]
+fibStream  = 0:1:zipWith (+) [fibStream !! 0] [fibStream !! 1]
 
 
 
