@@ -4,30 +4,19 @@
 GHCi> take 10 $ fibStream
 [0,1,1,2,3,5,8,13,21,34]
 -}
-{-
+-- моё
 fibStream :: [Integer]
-fibStream = fib 0 1 where
-    fib n1 n2 | (n1 == 0 && n2 ==1) = [0,1,1] ++ fib (2) (3)
-              | otherwise =  (zipWith (+) [n1] [n2]) ++ fib (n1+1) (n2+1)
--}
-{-
-fibStream :: [Integer]
-fibStream  = 0:1:zipWith (+) [fibStream !! 0] [fibStream !! 1]
--}
+fibStream = 0:1:zipWith (+) fibStream (tail fibStream)
 
---fibStream :: [Integer]
---fibStream n = 0:1:zipWith (+) [fibStream !! n] [fibStream !! n]
+-- stepik
+fibStream' = 0 : 1 : zipWith (+) fibStream' (drop 1 fibStream')
 
-fibStream :: [Integer]
-fibStream  = fbs n where 
-    fbs n = 0:1:zipWith (+) [fbs !! n] [fbs !! n]
+-- без zipWith
+fibStream'' = helper 0 1  where 
+        helper a b = a : helper b (a + b)
 
 
-fibStream' :: [Integer]
-fibStream' = fs 0 where 
-    fs n = fibonacci (n) : fs (n+1) where 
-        fibonacci 0 = 0
-        fibonacci 1 = 1
-        fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
+-- Прикольно
+fibStream''' = zipWith (+) (0:fibStream''') (0:1:fibStream''')
 
-
+fibStream'''' = 0 : zipWith (+) fibStream'''' (1 : fibStream'''')
