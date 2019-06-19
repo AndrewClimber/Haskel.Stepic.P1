@@ -14,6 +14,7 @@ max3 a1 a2 a3 = m3 a1 a2 a3 where
         elpos3 n1 n2 n3 = [glu3 !! n1 , glu3 !! n2 , glu3 !! n3]
         glu3 = a1 ++ a2 ++ a3
         --concat3 l = [(elpos3 0 l (l+l))] ++ [(elpos3 1 (1+l) (1+l+l))] ++  [(elpos3 2 (2+l) (2+l+l))] ++  [(elpos3 3 (3+l) (3+l+l))]
-        con3 n l | n < l-1 = ([(elpos3 n l (n+l+l))] ++ (con3 n+1 l))
+        --con3 n l | n < l-1 = ([(elpos3 n l (n+l+l))] ++ (con3 n+1 l))
+        con3 n l | n < l-1 = [(elpos3 n l (n+l+l))] ++ [(con3 n+1 l)]
         
         
