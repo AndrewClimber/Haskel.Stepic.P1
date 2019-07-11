@@ -14,31 +14,17 @@ GHCi> change 7
 
 import Data.List
 
---coins = [2, 3, 7]
-coins = [2, 3, 4]
---change :: (Ord a, Num a) => a -> [[a]]
-change n = pe n where
-    pe n = [x | x <- l . map l . tails $ cycle coins, sum(x)==n] where 
-        l = take $ length coins
+helper y [] = [[y]]
+helper y (x : lst) = (y : x : lst) :  (map (\u -> x : u) (helper y lst))   
+perms [] = [[]]
+perms (x : xs) = concatMap (\u -> helper x u) (perms xs) 
 
---repl n = [x | x <- replicate n 1]
-
-ta n = [x | x <- tails $ replicate n 1]
+permutations' :: Eq a => [a] -> [[a]]
+permutations' []   = [[]]
+permutations' list = [(x:xs) | x <- list, xs <- permutations' $ delete x list]
 
 
-
-
-ii n = [x | x <- inits $ replicate n 1]
-
-eee n = [x `zip` y | x <- (tails $ replicate n 1), y <- (inits $ replicate n 1)]
-
---tails $ scanr (+) (last (repl 7))  (repl 7)
---permutations coins
---tails $ scanr ( (head(repl 7)) + (last (repl 7)) )  (repl 7)
-
-rota xs = nub $ tail $ zipWith (++) (tails xs) (inits xs)
-
-perm [] = [[]]
-perm xs = nub [x:ps | (hs, x:ts) <- (inits xs `zip` tails xs), ps <- perm (hs ++ ts)]
-
+coins = [1, 2, 3, 5]
+change :: (Ord a, Num a) => a -> [[a]]
+change = undefined
 
