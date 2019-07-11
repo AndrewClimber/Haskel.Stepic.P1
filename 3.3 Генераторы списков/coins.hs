@@ -24,7 +24,8 @@ change n = pe n where
 --repl n = [x | x <- replicate n 1]
 
 ta n = [x | x <- tails $ replicate n 1]
-
+mTree 0 = []
+mTree n = [x | x <- [n-(n-2),n-2]:mTree (n-2)]
 
 
 
