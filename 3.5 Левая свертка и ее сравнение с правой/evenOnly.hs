@@ -7,6 +7,9 @@ GHCi> evenOnly [1..10]
 GHCi> evenOnly ['a'..'z']
 "bdfhjlnprtvxz"
 -}
+import Data.List
+import Data.Maybe
 
-evenOnly :: [a] -> [a]
-evenOnly = undefined
+--evenOnly :: [a] -> [a]
+--evenOnly s = foldr 
+evenPosList c s = even $ (fromJust $ elemIndex c s)+1
